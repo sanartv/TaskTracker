@@ -29,7 +29,7 @@ public class TaskService {
         Task task = new Task();
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
-        task.setDeadLine(request.getDeadline());
+        task.setDeadline(request.getDeadline());
         task.setStatus(Status.NEW);
         task.setAuthor(author);
 
@@ -48,4 +48,18 @@ public class TaskService {
     public void deleteTask(Long id) {
         taskRepository.deleteById(id);
     }
+
+
+    public List<Task> getTasksByStatus(Long userId, Status status) {
+        return taskRepository.findByAuthorIdAndStatus(userId, status);
+    }
+
+    public List<Task> searchTasks(Long userId, String keyword) {
+        return taskRepository.findByAuthorIdAndTitleContainingIgnoreCase(userId,keyword);
+    }
+
+    public List<Task> getTasksSortedByDeadline(Long userId) {
+        return taskRepository.findByAuthorIdOrderByDeadlineAsc(userId);
+    }
+
 }

@@ -22,7 +22,7 @@ public class Task {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    private LocalDateTime deadLine;
+    private LocalDateTime deadline;
 
     private String title;
 

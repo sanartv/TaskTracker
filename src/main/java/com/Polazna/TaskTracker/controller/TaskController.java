@@ -36,4 +36,22 @@ public class TaskController {
     public void delete(@PathVariable Long id) {
         taskService.deleteTask(id);
     }
+
+    @GetMapping("/filter")
+    public List<Task> filterByStatus(@RequestParam Long userId, @RequestParam Status status) {
+        return taskService.getTasksByStatus(userId, status);
+    }
+
+
+    @GetMapping("/search")
+    public List<Task> searchByTitle(@RequestParam Long userId, @RequestParam String keyword) {
+        return taskService.searchTasks(userId, keyword);
+    }
+
+
+    @GetMapping("/sorted")
+    public List<Task> getSortedTasks(@RequestParam Long userId) {
+        return taskService.getTasksSortedByDeadline(userId);
+    }
+
 }
