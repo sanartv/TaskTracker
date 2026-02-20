@@ -4,6 +4,7 @@ import com.Polazna.TaskTracker.dto.CreateTaskRequest;
 import com.Polazna.TaskTracker.entity.Status;
 import com.Polazna.TaskTracker.entity.Task;
 import com.Polazna.TaskTracker.entity.User;
+import com.Polazna.TaskTracker.exception.ResourceNotFoundException;
 import com.Polazna.TaskTracker.repository.TaskRepository;
 import com.Polazna.TaskTracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class TaskService {
 
     public Task createTask(CreateTaskRequest request) {
         User author = userRepository.findById(request.getAuthorId())
-                .orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+                .orElseThrow(() -> new ResourceNotFoundException("Пользователь не найден"));
 
         Task task = new Task();
         task.setTitle(request.getTitle());
@@ -38,7 +39,7 @@ public class TaskService {
 
     public Task updateTaskStatus(Long taskId, Status newStatus) {
         Task task = taskRepository.findById(taskId)
-                .orElseThrow(() -> new RuntimeException("Задача не найдена"));
+                .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена"));
 
         task.setStatus(newStatus);
 
@@ -46,6 +47,9 @@ public class TaskService {
     }
 
     public void deleteTask(Long id) {
+        if(!taskRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Задача с ID:" + id + " не найдена");
+        }
         taskRepository.deleteById(id);
     }
 

@@ -4,6 +4,7 @@ import com.Polazna.TaskTracker.dto.CreateTaskRequest;
 import com.Polazna.TaskTracker.entity.Status;
 import com.Polazna.TaskTracker.entity.Task;
 import com.Polazna.TaskTracker.service.TaskService;
+import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +19,7 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    public Task create(@RequestBody CreateTaskRequest request) {
+    public Task create(@Valid @RequestBody CreateTaskRequest request) {
         return taskService.createTask(request);
     }
 
