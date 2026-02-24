@@ -5,11 +5,16 @@ import com.Polazna.TaskTracker.entity.Role;
 import com.Polazna.TaskTracker.entity.User;
 import com.Polazna.TaskTracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.Nullable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsPasswordService;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService, UserDetailsPasswordService {
 
     private final UserRepository userRepository;
 
@@ -35,5 +40,20 @@ public class UserService {
         }
 
         return userRepository.save(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Пользователь не найден: " + username));
+    }
+
+    public User getCurrentUser() {
+        return null;
+    }
+
+    @Override
+    public UserDetails updatePassword(UserDetails user, @Nullable String newPassword) {
+        return null;
     }
 }
