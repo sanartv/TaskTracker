@@ -9,6 +9,8 @@ import com.Polazna.TaskTracker.repository.TaskRepository;
 import com.Polazna.TaskTracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
 
@@ -41,16 +43,29 @@ public class TaskService {
         Task task = taskRepository.findById(taskId)
                 .orElseThrow(() -> new ResourceNotFoundException("Задача не найдена"));
 
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!task.getAuthor().getUsername().equals(currentUsername)) {
+            throw new AccessDeniedException("Вы не можете изменить чужую задачу!");
+        }
+
         task.setStatus(newStatus);
 
         return taskRepository.save(task);
     }
 
     public void deleteTask(Long id) {
-        if(!taskRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Задача с ID:" + id + " не найдена");
+
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Задача с ID: " + id + " не найдена"));
+
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!task.getAuthor().getUsername().equals(currentUsername)) {
+            throw new AccessDeniedException("Вы не можете удалить чужую задачу!");
         }
-        taskRepository.deleteById(id);
+
+        taskRepository.delete(task);
     }
 
 
