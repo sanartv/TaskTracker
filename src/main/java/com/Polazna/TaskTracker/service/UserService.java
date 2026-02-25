@@ -5,7 +5,6 @@ import com.Polazna.TaskTracker.entity.Role;
 import com.Polazna.TaskTracker.entity.User;
 import com.Polazna.TaskTracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsPasswordService;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,7 +52,7 @@ public class UserService implements UserDetailsService, UserDetailsPasswordServi
     }
 
     @Override
-    public UserDetails updatePassword(UserDetails user, @Nullable String newPassword) {
+    public UserDetails updatePassword(UserDetails user, String newPassword) {
         return null;
     }
 }
